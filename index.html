@@ -135,7 +135,7 @@
     border-radius: 50px;
     padding: 5px;
     gap: 4px;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
     box-shadow: var(--shadow);
   }
 
@@ -168,10 +168,74 @@
     box-shadow: var(--shadow);
     padding: 2.5rem 3rem;
     text-align: center;
-    width: 100%;
-    max-width: 420px;
-    position: relative;
-    margin-bottom: 1.5rem;
+    width: 360px;
+    position: fixed;
+    z-index: 50;
+    cursor: default;
+    transition: top 0.7s cubic-bezier(0.34,1.56,0.64,1),
+                left 0.7s cubic-bezier(0.34,1.56,0.64,1),
+                width 0.6s cubic-bezier(0.34,1.2,0.64,1),
+                padding 0.5s ease,
+                box-shadow 0.3s ease;
+    user-select: none;
+  }
+
+  .timer-card.docked {
+    width: 260px;
+    padding: 1.4rem 1.6rem 1.2rem;
+  }
+
+  .timer-card.docked .ring-wrap {
+    width: 150px !important;
+    height: 150px !important;
+    margin-bottom: 0.8rem;
+  }
+
+  .timer-card.docked .ring-svg {
+    width: 150px !important;
+    height: 150px !important;
+  }
+
+  .timer-card.docked .time-display { font-size: 2.2rem !important; }
+  .timer-card.docked .time-sub { display: none !important; }
+  .timer-card.docked .session-label { font-size: 0.68rem; margin-bottom: 0.5rem; }
+  .timer-card.docked .controls { gap: 10px; margin-bottom: 0.2rem; }
+  .timer-card.docked .play-btn { width: 46px !important; height: 46px !important; font-size: 15px !important; }
+  .timer-card.docked .ctrl-btn { width: 32px !important; height: 32px !important; font-size: 11px !important; }
+  .timer-card.docked .session-dots { margin-top: 0.5rem; }
+
+  .timer-card.dragging {
+    box-shadow: 0 20px 60px rgba(180,100,140,0.28);
+    cursor: grabbing;
+    transition: box-shadow 0.2s;
+  }
+
+  .drag-handle {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 36px;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .drag-handle:active { cursor: grabbing; }
+
+  .drag-dots {
+    display: flex;
+    gap: 4px;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  .timer-card:hover .drag-dots { opacity: 0.6; }
+
+  .drag-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--text);
   }
 
   .session-label {
@@ -290,6 +354,7 @@
     gap: 1.2rem;
     width: 100%;
     max-width: 900px;
+    margin-top: 520px;
   }
 
   @media (max-width: 700px) {
@@ -624,6 +689,94 @@
 
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+  /* ── Motivation block ── */
+  #motivation-block {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 50;
+    max-width: 280px;
+    opacity: 0;
+    transform: translateX(-18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+  }
+
+  #motivation-block.visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .motiv-inner {
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(18px);
+    border: 1.5px solid rgba(255,255,255,0.45);
+    border-radius: 18px;
+    padding: 1.1rem 1.3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .motiv-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--rose-dark), var(--lavender-dark));
+    border-radius: 3px 0 0 3px;
+  }
+
+  .motiv-tag {
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rose-dark);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .motiv-tag-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--rose-dark);
+    animation: motiv-pulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes motiv-pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .motiv-quote {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .motiv-quote.changing {
+    animation: motiv-swap 0.5s ease;
+  }
+
+  @keyframes motiv-swap {
+    0% { opacity: 1; transform: translateY(0); }
+    40% { opacity: 0; transform: translateY(-8px); }
+    60% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .motiv-author {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-thumb { background: rgba(180,140,160,0.35); border-radius: 4px; }
@@ -655,6 +808,15 @@
 <div id="bg-layer"></div>
 <div id="bg-overlay"></div>
 
+<!-- Motivation block (upper left, visible when running) -->
+<div id="motivation-block">
+  <div class="motiv-inner">
+    <div class="motiv-tag"><span class="motiv-tag-dot"></span> fuel up</div>
+    <div class="motiv-quote" id="motiv-quote">You don't stop when you're tired. You stop when you're done.</div>
+    <div class="motiv-author" id="motiv-author">— bloomi</div>
+  </div>
+</div>
+
 <div id="app">
   <header>
     <div class="logo">
@@ -673,8 +835,14 @@
     <button class="mode-tab" data-mode="long">Long break</button>
   </div>
 
-  <!-- Timer card -->
-  <div class="timer-card">
+  <!-- Timer card (draggable) -->
+  <div class="timer-card" id="timer-card">
+    <div class="drag-handle" id="drag-handle">
+      <div class="drag-dots">
+        <div class="drag-dot"></div><div class="drag-dot"></div><div class="drag-dot"></div>
+        <div class="drag-dot"></div><div class="drag-dot"></div><div class="drag-dot"></div>
+      </div>
+    </div>
     <div class="session-label" id="session-label">Focus session · 1 of 4</div>
     <div class="ring-wrap">
       <svg class="ring-svg" width="220" height="220" viewBox="0 0 220 220">
@@ -955,77 +1123,6 @@ function updateSessionUI() {
 }
 
 // ─── Timer logic ──────────────────────────────────────────────
-function startTimer() {
-  if (state.interval) clearInterval(state.interval);
-  state.running = true;
-  playBtn.textContent = '⏸';
-  ring.classList.add('running');
-  state.interval = setInterval(() => {
-    state.elapsed++;
-    updateDisplay();
-    if (state.elapsed >= state.total) {
-      onSessionEnd();
-    }
-  }, 1000);
-}
-
-function pauseTimer() {
-  clearInterval(state.interval);
-  state.interval = null;
-  state.running = false;
-  playBtn.textContent = '▶';
-  ring.classList.remove('running');
-}
-
-function resetTimer() {
-  pauseTimer();
-  state.elapsed = 0;
-  updateDisplay();
-  updateSessionUI();
-}
-
-function onSessionEnd() {
-  pauseTimer();
-  playSound();
-  if (state.mode === 'focus') {
-    const mins = state.focusDur;
-    state.stats.sessions++;
-    state.stats.minutes += mins;
-    state.stats.streak++;
-    // add to history
-    const taskName = state.activeTaskId
-      ? (state.tasks.find(t => t.id === state.activeTaskId) || {}).name || '—'
-      : '—';
-    state.history.unshift({
-      time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-      task: taskName,
-      mins,
-    });
-    if (state.history.length > 20) state.history.pop();
-    // increment task pomodoros
-    if (state.activeTaskId) {
-      const t = state.tasks.find(t => t.id === state.activeTaskId);
-      if (t) t.pomodoros = (t.pomodoros || 0) + 1;
-    }
-    save();
-    renderStats();
-    renderHistory();
-    renderTasks();
-    showToast(`Focus session complete! 🌸 +${mins} min`);
-    // transition to break
-    state.sessionIndex++;
-    if (state.sessionIndex >= state.sessionsBeforeLong) {
-      state.sessionIndex = 0;
-      switchMode('long');
-    } else {
-      switchMode('short');
-    }
-  } else {
-    showToast('Break over — back to focus! ✦');
-    switchMode('focus');
-  }
-}
-
 function switchMode(mode) {
   state.mode = mode;
   state.elapsed = 0;
@@ -1195,26 +1292,13 @@ soundToggleBtn.addEventListener('click', toggleSound);
 // ─── Mode tabs ────────────────────────────────────────────────
 modeTabs.forEach(tab => {
   tab.addEventListener('click', () => {
-    if (state.running) pauseTimer();
+    if (state.running) {
+      pauseTimer();
+      undockTimer();
+      hideMotivation();
+    }
     switchMode(tab.dataset.mode);
   });
-});
-
-// ─── Controls ─────────────────────────────────────────────────
-playBtn.addEventListener('click', () => {
-  if (state.running) pauseTimer();
-  else startTimer();
-});
-
-skipBtn.addEventListener('click', () => {
-  pauseTimer();
-  onSessionEnd();
-});
-
-resetBtn.addEventListener('click', () => {
-  if (state.running) pauseTimer();
-  state.elapsed = 0;
-  updateDisplay();
 });
 
 // ─── Background ───────────────────────────────────────────────
@@ -1314,7 +1398,200 @@ uploadZone.addEventListener('drop', e => {
   }
 });
 
+// ─── Timer positioning ────────────────────────────────────────
+const timerCard = document.getElementById('timer-card');
+const dragHandle = document.getElementById('drag-handle');
+
+const CARD_W_FULL = 360;
+const CARD_W_DOCKED = 260;
+const DOCK_MARGIN = 20;
+
+function getCenterPos() {
+  const W = window.innerWidth, H = window.innerHeight;
+  return { x: Math.round((W - CARD_W_FULL) / 2), y: Math.round((H - 480) / 2) };
+}
+
+function getDockPos() {
+  const W = window.innerWidth;
+  return { x: W - CARD_W_DOCKED - DOCK_MARGIN, y: DOCK_MARGIN };
+}
+
+function applyPos(x, y) {
+  timerCard.style.left = x + 'px';
+  timerCard.style.top  = y + 'px';
+}
+
+function clampPos(x, y) {
+  const W = window.innerWidth, H = window.innerHeight;
+  const cw = timerCard.offsetWidth || CARD_W_FULL;
+  const ch = timerCard.offsetHeight || 480;
+  return { x: Math.max(0, Math.min(x, W - cw)), y: Math.max(0, Math.min(y, H - ch)) };
+}
+
+// Track whether user has manually dragged
+let userDragged = false;
+let timerPos = getCenterPos();
+applyPos(timerPos.x, timerPos.y);
+
+function dockTimer() {
+  if (!userDragged) {
+    timerCard.classList.add('docked');
+    const { x, y } = getDockPos();
+    timerPos = { x, y };
+    applyPos(x, y);
+  }
+}
+
+function undockTimer() {
+  if (!userDragged) {
+    timerCard.classList.remove('docked');
+    const { x, y } = getCenterPos();
+    timerPos = { x, y };
+    applyPos(x, y);
+  }
+}
+
+// Drag state
+let drag = { active: false, startX: 0, startY: 0, origX: 0, origY: 0 };
+
+function onDragStart(e) {
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  drag = {
+    active: true,
+    startX: clientX,
+    startY: clientY,
+    origX: parseInt(timerCard.style.left) || timerPos.x,
+    origY: parseInt(timerCard.style.top)  || timerPos.y,
+  };
+  timerCard.classList.add('dragging');
+  e.preventDefault();
+}
+
+function onDragMove(e) {
+  if (!drag.active) return;
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  const dx = clientX - drag.startX;
+  const dy = clientY - drag.startY;
+  if (Math.abs(dx) > 4 || Math.abs(dy) > 4) userDragged = true;
+  const { x, y } = clampPos(drag.origX + dx, drag.origY + dy);
+  applyPos(x, y);
+}
+
+function onDragEnd() {
+  if (!drag.active) return;
+  drag.active = false;
+  timerCard.classList.remove('dragging');
+  timerPos = { x: parseInt(timerCard.style.left), y: parseInt(timerCard.style.top) };
+}
+
+dragHandle.addEventListener('mousedown', onDragStart);
+document.addEventListener('mousemove', onDragMove);
+document.addEventListener('mouseup', onDragEnd);
+dragHandle.addEventListener('touchstart', onDragStart, { passive: false });
+document.addEventListener('touchmove', onDragMove, { passive: false });
+document.addEventListener('touchend', onDragEnd);
+
+window.addEventListener('resize', () => {
+  if (!userDragged) {
+    const pos = state.running ? getDockPos() : getCenterPos();
+    timerPos = pos;
+    applyPos(pos.x, pos.y);
+    if (state.running) {
+      const { x, y } = getDockPos();
+      timerPos = { x, y };
+      applyPos(x, y);
+    }
+  } else {
+    const { x, y } = clampPos(timerPos.x, timerPos.y);
+    applyPos(x, y);
+    timerPos = { x, y };
+  }
+});
+
+// ─── Motivation block ─────────────────────────────────────────
+const RAGE_QUOTES = [
+  { q: "You don't stop when you're tired. You stop when you're done.", a: "— unknown" },
+  { q: "Do it now. Your future self is watching.", a: "— bloomi" },
+  { q: "Every second you waste is borrowed from your dream.", a: "— bloomi" },
+  { q: "Pain is temporary. Quitting lasts forever.", a: "— Lance Armstrong" },
+  { q: "Stop wishing. Start doing. Right now.", a: "— bloomi" },
+  { q: "Your comfort zone is a beautiful place, but nothing grows there.", a: "— unknown" },
+  { q: "The people who are crazy enough to think they can change the world are the ones who do.", a: "— Steve Jobs" },
+  { q: "Hard work beats talent when talent doesn't work hard.", a: "— Tim Notke" },
+  { q: "You have exactly one life. How are you spending this session?", a: "— bloomi" },
+  { q: "Champions keep going when they have nothing left.", a: "— unknown" },
+  { q: "You are not tired. You are distracted.", a: "— bloomi" },
+  { q: "The clock doesn't stop. Neither should you.", a: "— bloomi" },
+  { q: "Discipline is choosing between what you want now and what you want most.", a: "— unknown" },
+  { q: "It never gets easier. You just get stronger.", a: "— unknown" },
+  { q: "Your brain is lying to you. Keep going anyway.", a: "— bloomi" },
+  { q: "One more session. That's all. Just one more.", a: "— bloomi" },
+  { q: "Mediocrity is comfortable. Excellence is a choice.", a: "— bloomi" },
+  { q: "While you rest, someone else is catching up.", a: "— bloomi" },
+  { q: "Focus is the art of saying no to everything else.", a: "— bloomi" },
+  { q: "The grind is the goal.", a: "— bloomi" },
+];
+
+const motivBlock = document.getElementById('motivation-block');
+const motivQuote = document.getElementById('motiv-quote');
+const motivAuthor = document.getElementById('motiv-author');
+let motivIdx = 0;
+
+function showMotivation() {
+  motivBlock.classList.add('visible');
+}
+
+function hideMotivation() {
+  motivBlock.classList.remove('visible');
+}
+
+function cycleMotivation() {
+  motivIdx = (motivIdx + 1) % RAGE_QUOTES.length;
+  motivQuote.classList.add('changing');
+  setTimeout(() => {
+    const q = RAGE_QUOTES[motivIdx];
+    motivQuote.textContent = q.q;
+    motivAuthor.textContent = q.a;
+    motivQuote.classList.remove('changing');
+  }, 250);
+}
+
+// Randomize start quote
+motivIdx = Math.floor(Math.random() * RAGE_QUOTES.length);
+motivQuote.textContent = RAGE_QUOTES[motivIdx].q;
+motivAuthor.textContent = RAGE_QUOTES[motivIdx].a;
+
 // ─── Init ──────────────────────────────────────────────────────
+// ─── playBtnFinal — clone node to clear any stale listeners ──
+const oldPlayBtn = document.getElementById('play-btn');
+const newPlayBtn = oldPlayBtn.cloneNode(true);
+oldPlayBtn.parentNode.replaceChild(newPlayBtn, oldPlayBtn);
+const playBtnFinal = document.getElementById('play-btn');
+
+function startTimer() {
+  if (state.interval) clearInterval(state.interval);
+  state.running = true;
+  playBtnFinal.textContent = '⏸';
+  ring.classList.add('running');
+  state.interval = setInterval(() => {
+    state.elapsed++;
+    updateDisplay();
+    if (state.elapsed >= state.total) {
+      onSessionEnd();
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(state.interval);
+  state.interval = null;
+  state.running = false;
+  playBtnFinal.textContent = '▶';
+  ring.classList.remove('running');
+}
+
 function init() {
   switchMode('focus');
   syncSettings();
@@ -1323,13 +1600,85 @@ function init() {
   renderHistory();
   if (state.bgDataUrl) applyBg(state.bgDataUrl);
   updateDisplay();
+  // Center timer on load
+  const cp = getCenterPos();
+  timerPos = cp;
+  applyPos(cp.x, cp.y);
 
-  // Page visibility: pause when tab hidden
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && state.running) {
-      // Keep timer running in background using timestamps
+  document.addEventListener('visibilitychange', () => {});
+}
+
+playBtnFinal.addEventListener('click', () => {
+  if (state.running) {
+    pauseTimer();
+    undockTimer();
+    hideMotivation();
+    playBtnFinal.textContent = '▶';
+  } else {
+    startTimer();
+    dockTimer();
+    showMotivation();
+    playBtnFinal.textContent = '⏸';
+  }
+});
+
+// Skip and reset with dock/undock
+document.getElementById('skip-btn').addEventListener('click', () => {
+  pauseTimer();
+  undockTimer();
+  hideMotivation();
+  onSessionEnd();
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  pauseTimer();
+  undockTimer();
+  hideMotivation();
+  state.elapsed = 0;
+  updateDisplay();
+});
+
+// onSessionEnd — cycles motivation, undocks timer
+function onSessionEnd() {
+  pauseTimer();
+  playSound();
+  undockTimer();
+  hideMotivation();
+  if (state.mode === 'focus') {
+    const mins = state.focusDur;
+    state.stats.sessions++;
+    state.stats.minutes += mins;
+    state.stats.streak++;
+    const taskName = state.activeTaskId
+      ? (state.tasks.find(t => t.id === state.activeTaskId) || {}).name || '—'
+      : '—';
+    state.history.unshift({
+      time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+      task: taskName,
+      mins,
+    });
+    if (state.history.length > 20) state.history.pop();
+    if (state.activeTaskId) {
+      const t = state.tasks.find(t => t.id === state.activeTaskId);
+      if (t) t.pomodoros = (t.pomodoros || 0) + 1;
     }
-  });
+    save();
+    renderStats();
+    renderHistory();
+    renderTasks();
+    cycleMotivation();
+    showToast(`Focus session complete! 🌸 +${mins} min`);
+    state.sessionIndex++;
+    if (state.sessionIndex >= state.sessionsBeforeLong) {
+      state.sessionIndex = 0;
+      switchMode('long');
+    } else {
+      switchMode('short');
+    }
+  } else {
+    showToast('Break over — back to focus! ✦');
+    switchMode('focus');
+  }
 }
 
 init();
